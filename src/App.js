@@ -9,6 +9,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [age, setAge] = useState(0);
+  const [newEmployeeName, setNewEmployeeName] = useState("");
 
   const [employeeList, setEmployeeList] = useState([]);
 
@@ -27,6 +28,18 @@ function App() {
       age: age
     });
   };
+
+  const updateEmployee = (id) => {
+    Axios.put("http://localhost:3001/update", {
+      id: id,
+      newEmployeeName: newEmployeeName,
+    });
+  };
+
+  const deleteEmployee = (id) => {
+    Axios.delete(`http://localhost:3001/delete/${id}`);
+  };
+
 
   return (
     <div className="App">
@@ -74,16 +87,26 @@ function App() {
 
       <button onClick={addToList}>Add to List</button>
 
-      <h1>Employee List</h1> 
+      <h1>Employee List</h1>
 
       {employeeList.map((val, key) => {
         return (
-          <div key={key}>
+          <div key={key} className="employee">
             <h2> {val.name} </h2>
             <h2> {val.designation}</h2>
             <h2> {val.email} </h2>
             <h2> {val.phone} </h2>
-            <h2> {val.age} </h2> <br/>
+            <h2> {val.age} </h2>
+            <input
+              type="text"
+              placeholder="New Person Name..."
+              onChange={(event) => {
+                setNewEmployeeName(event.target.value);
+              }}
+            />
+            <button onClick={()=> updateEmployee(val._id)}> Update </button>
+            <button onClick={()=> deleteEmployee(val._id)}> Delete </button>
+            <br />
           </div>
         );
       })}
